@@ -11,21 +11,24 @@ protocol MainViewInputProtocol: AnyObject {
     func displayTitle(with title: String)
     func displayTitleBottomButton(with actionTitle: String)
     func reloadData(for section: OrderSection)
+    func showAlert(with title: String, message: String)
 }
 
 protocol MainViewOutputProtocol: AnyObject {
     init(view: MainViewInputProtocol)
     func showDetails()
     func cellDidSelect(at indexPath: IndexPath)
+    func buttomButtonDidSelect()
 }
 
 
 extension MainViewController: MainViewInputProtocol {
-    
-    func changeStatus(for section: OrderSection) {
-        
+    func showAlert(with title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        self.present(alert, animated: true)
     }
-    
     
     func reloadData(for section: OrderSection) {
         self.section = section
@@ -64,6 +67,10 @@ class MainViewController: UIViewController {
         self.collectionView.delegate = self
         
     }
+    @IBAction func bottomButtonDidSelect() {
+        presenter.buttomButtonDidSelect()
+    }
+    
 }
 
 // Конфигурируем состояние элементов MainView
@@ -106,6 +113,5 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         CGSize(width: UIScreen.main.bounds.width - 32, height: CGFloat(section.rows[indexPath.row].cellHieght))
     }
 }
-
 
 

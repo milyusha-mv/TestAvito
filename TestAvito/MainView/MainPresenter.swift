@@ -23,6 +23,11 @@ struct OrderType {
     let isSelected: Bool
 }
 
+struct AlertData {
+    let title: String
+    let message: String
+}
+
 class MainPresenter: MainViewOutputProtocol {
     
     unowned let view: MainViewInputProtocol
@@ -41,10 +46,15 @@ class MainPresenter: MainViewOutputProtocol {
         interactor.changeCheckedStatus(at: indexPath)
         interactor.changeBottomButtonTitle(at: indexPath)
     }
+    
+    func buttomButtonDidSelect() {
+        interactor.getDataForAlert()
+    }
+    
 }
 
 extension MainPresenter: MainInteractorOutputProtocol {
-    
+
     func ordersDidRecieve(orderTypes: [OrderType]) {
         let section = OrderSection()
         orderTypes.forEach { orderType in
@@ -60,5 +70,12 @@ extension MainPresenter: MainInteractorOutputProtocol {
     
     func changeTitleBottomButton(title: String) {
         view.displayTitleBottomButton(with: title)
+    }
+    
+    func dataForAlertDidRecieve(alertData: AlertData) {
+        let title = alertData.title
+        let message = alertData.message
+        view.showAlert(with: title, message: message)
+        
     }
 }

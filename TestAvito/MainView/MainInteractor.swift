@@ -13,18 +13,43 @@ protocol MainInteractorInputProtocol: AnyObject {
     func getOrders()
     func changeCheckedStatus(at indexPath: IndexPath)
     func changeBottomButtonTitle(at indexPath: IndexPath)
+    func getDataForAlert()
 }
 
 protocol MainInteractorOutputProtocol: AnyObject {
     func mainDataDidRecive(viewData: ViewData)
     func ordersDidRecieve(orderTypes: [OrderType])
     func changeTitleBottomButton(title: String)
+    func dataForAlertDidRecieve(alertData: AlertData)
 }
 
 class MainInteractor: MainInteractorInputProtocol {
+    
     unowned let presenter: MainInteractorOutputProtocol
     required init(presenter: MainInteractorOutputProtocol) {
         self.presenter = presenter
+    }
+    
+    func getDataForAlert() {
+        var alertData = AlertData(title: "", message: "")
+        var isCheched = false
+        var i = 0
+        let orders = DataManager.shared.getOrders()
+        
+        for index in 0...orders.count-1 {
+            let order = orders[index]
+            if order.isCheked == true {
+                i = index
+                isCheched = true
+                break
+            }
+        }
+        if isCheched == true {
+            alertData = AlertData(title: orders[i].titleName, message: orders[i].definition)
+        } else {
+            alertData = AlertData(title: "Внимание", message: "Вы ничего не выбрали")
+        }
+        presenter.dataForAlertDidRecieve(alertData: alertData)
     }
     
     func getOrders() {
