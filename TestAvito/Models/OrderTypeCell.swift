@@ -16,7 +16,7 @@ protocol SectionRowsRepresentable {
     var rows: [CellIndentiIdentifier] { get set }
 }
 
-class CollectionCell: CellIndentiIdentifier {
+class OrderTypeCell: CellIndentiIdentifier {
     var cellIdentifier: String {
         "cell"
     }
@@ -29,14 +29,14 @@ class CollectionCell: CellIndentiIdentifier {
     let definition: String
     let price: String
     let imageURL: String
-//    let imageCheckBox: String
+    let isCheched: Bool
     
-    init (order: Order) {
-        titleName = order.titleName
-        definition = order.definition
-        price = order.price
-        imageURL = order.imageUrl
- //       imageCheckBox = collectionViewData.imageCheckBox
+    init (orderType: OrderType) {
+        titleName = orderType.titleName
+        definition = orderType.definition
+        price = orderType.price
+        imageURL = orderType.imageUrl
+        isCheched = orderType.isCheked
     }
 }
 

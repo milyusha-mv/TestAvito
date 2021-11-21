@@ -95,6 +95,7 @@
                                         <connections>
                                             <outlet property="cellTitle" destination="Zw8-eq-g92" id="AqD-bG-izU"/>
                                             <outlet property="cellUIImageView" destination="wRi-wS-lk3" id="cLT-on-InL"/>
+                                            <outlet property="checkBox" destination="hn9-CB-1vG" id="Ih8-Fh-RKd"/>
                                             <outlet property="definitionLabel" destination="qWG-xJ-uWm" id="Dte-CW-6uf"/>
                                             <outlet property="priceLabel" destination="Ru7-BO-hvN" id="HLA-BQ-Woc"/>
                                         </connections>

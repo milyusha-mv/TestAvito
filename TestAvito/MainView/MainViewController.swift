@@ -16,10 +16,16 @@ protocol MainViewInputProtocol: AnyObject {
 protocol MainViewOutputProtocol: AnyObject {
     init(view: MainViewInputProtocol)
     func showDetails()
+    func cellDidSelect(at indexPath: IndexPath)
 }
 
 
 extension MainViewController: MainViewInputProtocol {
+    
+    func changeStatus(for section: OrderSection) {
+        
+    }
+    
     
     func reloadData(for section: OrderSection) {
         self.section = section
@@ -27,9 +33,6 @@ extension MainViewController: MainViewInputProtocol {
             self.collectionView.reloadData()
         }
     }
-    
-    
-
     
     func displayTitleBottomButton(with actionTitle: String) {
         bottomButton.setTitle(actionTitle, for: .normal)
@@ -42,12 +45,10 @@ extension MainViewController: MainViewInputProtocol {
 }
 
 class MainViewController: UIViewController {
-    
-    
-    
     var presenter: MainViewOutputProtocol!
     private let configurator: MainConfiguratorProtocol = MainConfigurator()
     private var section: SectionRowsRepresentable = OrderSection()
+    private var checkedCells: [CollectionViewCell] = []
     
     @IBOutlet weak var bottomButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
@@ -56,11 +57,11 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.collectionView.dataSource = self
-        
         configurator.configure(with: self)
         configureViews()
         presenter.showDetails()
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
         
     }
 }
@@ -93,11 +94,16 @@ extension MainViewController: UICollectionViewDataSource {
         cell.orderCell = orderCell
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        presenter.cellDidSelect(at: indexPath)
+    }
 }
 
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: UIScreen.main.bounds.width, height: 200)
+        CGSize(width: UIScreen.main.bounds.width - 32, height: CGFloat(section.rows[indexPath.row].cellHieght))
     }
 }
 
